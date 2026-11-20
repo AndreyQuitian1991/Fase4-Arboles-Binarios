@@ -1,7 +1,9 @@
+
 """
 PHASE 4 - BINARY SEARCH TREE
 Student: Anderson Andrey Quitian Perez
 Course: Data Structures - 301305
+Application: Fase4AndreyQuitian
 """
 
 import tkinter as tk
@@ -9,9 +11,9 @@ from tkinter import messagebox
 from datetime import datetime
 
 
-# ==================================================
+# ==========================================================
 # BINARY TREE NODE
-# ==================================================
+# ==========================================================
 
 class TreeNode:
 
@@ -21,9 +23,9 @@ class TreeNode:
         self.right = None
 
 
-# ==================================================
+# ==========================================================
 # BINARY SEARCH TREE
-# ==================================================
+# ==========================================================
 
 class BinarySearchTree:
 
@@ -92,11 +94,34 @@ class BinarySearchTree:
 
         return False
 
+    def search_path(self, value):
+        """Return the nodes visited during a search."""
+
+        current = self.root
+        path = []
+
+        while current is not None:
+
+            path.append(current.value)
+
+            if value == current.value:
+                return path
+
+            elif value < current.value:
+                current = current.left
+
+            else:
+                current = current.right
+
+        return []
+
     def preorder(self):
+        """Root, Left, Right."""
 
         result = []
 
         def visit(node):
+
             if node is not None:
                 result.append(node.value)
                 visit(node.left)
@@ -106,10 +131,12 @@ class BinarySearchTree:
         return result
 
     def inorder(self):
+        """Left, Root, Right."""
 
         result = []
 
         def visit(node):
+
             if node is not None:
                 visit(node.left)
                 result.append(node.value)
@@ -119,10 +146,12 @@ class BinarySearchTree:
         return result
 
     def postorder(self):
+        """Left, Right, Root."""
 
         result = []
 
         def visit(node):
+
             if node is not None:
                 visit(node.left)
                 visit(node.right)
@@ -135,9 +164,9 @@ class BinarySearchTree:
         self.root = None
 
 
-# ==================================================
+# ==========================================================
 # LOGIN WINDOW
-# ==================================================
+# ==========================================================
 
 class LoginWindow:
 
@@ -158,6 +187,7 @@ class LoginWindow:
             self.root,
             bg="#142536"
         )
+
         frame.pack(
             fill="both",
             expand=True,
@@ -220,6 +250,7 @@ class LoginWindow:
             justify="center",
             width=25
         )
+
         self.password_entry.pack(ipady=6)
         self.password_entry.focus()
 
@@ -267,9 +298,9 @@ class LoginWindow:
             self.password_entry.focus()
 
 
-# ==================================================
+# ==========================================================
 # MAIN APPLICATION
-# ==================================================
+# ==========================================================
 
 class MainWindow:
 
@@ -277,7 +308,9 @@ class MainWindow:
 
         self.root = root
         self.tree = BinarySearchTree(max_levels=4)
-        self.highlighted_value = None
+
+        # Stores all nodes visited during the last successful search.
+        self.highlighted_path = set()
 
         self.root.title(
             "Fase4AndreyQuitian - Binary Search Tree"
@@ -300,14 +333,25 @@ class MainWindow:
 
         self.root.bind(
             "<Return>",
-            lambda event: self.add_node()
+            self.handle_enter_key
         )
 
         self.root.after(150, self.update_interface)
 
-    # --------------------------------------------------
-    # CREATE INTERFACE
-    # --------------------------------------------------
+    # ------------------------------------------------------
+    # HANDLE ENTER KEY
+    # ------------------------------------------------------
+
+    def handle_enter_key(self, event):
+
+        focused_widget = self.root.focus_get()
+
+        if focused_widget == self.value_entry:
+            self.add_node()
+
+    # ------------------------------------------------------
+    # CREATE MAIN INTERFACE
+    # ------------------------------------------------------
 
     def create_interface(self):
 
@@ -315,6 +359,7 @@ class MainWindow:
             self.root,
             bg="#142536"
         )
+
         main_frame.pack(
             fill="both",
             expand=True,
@@ -332,6 +377,7 @@ class MainWindow:
             main_frame,
             bg="#142536"
         )
+
         header.grid(
             row=0,
             column=0,
@@ -347,7 +393,11 @@ class MainWindow:
             font=("Arial", 22, "bold"),
             fg="#35C6D8",
             bg="#142536"
-        ).grid(row=0, column=0, sticky="w")
+        ).grid(
+            row=0,
+            column=0,
+            sticky="w"
+        )
 
         tk.Label(
             header,
@@ -355,7 +405,11 @@ class MainWindow:
             font=("Arial", 10),
             fg="white",
             bg="#142536"
-        ).grid(row=0, column=1, sticky="e")
+        ).grid(
+            row=0,
+            column=1,
+            sticky="e"
+        )
 
         # CONTROL PANEL
 
@@ -367,6 +421,7 @@ class MainWindow:
             bg="#20394D",
             bd=1
         )
+
         controls.grid(
             row=1,
             column=0,
@@ -395,6 +450,7 @@ class MainWindow:
             justify="center",
             width=12
         )
+
         self.value_entry.grid(
             row=0,
             column=1,
@@ -412,7 +468,12 @@ class MainWindow:
             font=("Arial", 10, "bold"),
             width=11,
             cursor="hand2"
-        ).grid(row=0, column=2, padx=5, pady=12)
+        ).grid(
+            row=0,
+            column=2,
+            padx=5,
+            pady=12
+        )
 
         tk.Button(
             controls,
@@ -423,7 +484,12 @@ class MainWindow:
             font=("Arial", 10, "bold"),
             width=12,
             cursor="hand2"
-        ).grid(row=0, column=3, padx=5, pady=12)
+        ).grid(
+            row=0,
+            column=3,
+            padx=5,
+            pady=12
+        )
 
         tk.Button(
             controls,
@@ -434,7 +500,12 @@ class MainWindow:
             font=("Arial", 10, "bold"),
             width=9,
             cursor="hand2"
-        ).grid(row=0, column=4, padx=5, pady=12)
+        ).grid(
+            row=0,
+            column=4,
+            padx=5,
+            pady=12
+        )
 
         tk.Button(
             controls,
@@ -453,7 +524,7 @@ class MainWindow:
             sticky="e"
         )
 
-        # TREE PANEL
+        # PANEL 1 - BINARY SEARCH TREE
 
         tree_frame = tk.LabelFrame(
             main_frame,
@@ -463,6 +534,7 @@ class MainWindow:
             bg="#20394D",
             bd=1
         )
+
         tree_frame.grid(
             row=2,
             column=0,
@@ -478,6 +550,7 @@ class MainWindow:
             bg="#F0F5FA",
             highlightthickness=0
         )
+
         self.tree_canvas.grid(
             row=0,
             column=0,
@@ -491,12 +564,13 @@ class MainWindow:
             lambda event: self.draw_tree()
         )
 
-        # TRAVERSAL PANELS
+        # PANELS 2, 3 AND 4 - TREE TRAVERSALS
 
         traversal_frame = tk.Frame(
             main_frame,
             bg="#142536"
         )
+
         traversal_frame.grid(
             row=3,
             column=0,
@@ -540,6 +614,7 @@ class MainWindow:
             bg="#142536",
             anchor="w"
         )
+
         self.status_label.grid(
             row=4,
             column=0,
@@ -547,9 +622,9 @@ class MainWindow:
             pady=(8, 0)
         )
 
-    # --------------------------------------------------
+    # ------------------------------------------------------
     # CREATE TRAVERSAL PANEL
-    # --------------------------------------------------
+    # ------------------------------------------------------
 
     def create_traversal_panel(self, parent, title, column):
 
@@ -561,6 +636,7 @@ class MainWindow:
             bg="#20394D",
             bd=1
         )
+
         panel.grid(
             row=0,
             column=column,
@@ -577,6 +653,7 @@ class MainWindow:
             highlightthickness=0,
             height=125
         )
+
         canvas.grid(
             row=0,
             column=0,
@@ -587,19 +664,21 @@ class MainWindow:
 
         return canvas
 
-    # --------------------------------------------------
-    # GET AND VALIDATE INPUT
-    # --------------------------------------------------
+    # ------------------------------------------------------
+    # VALIDATE INTEGER INPUT
+    # ------------------------------------------------------
 
     def get_input_value(self):
 
         raw_value = self.value_entry.get().strip()
 
         if not raw_value:
+
             messagebox.showwarning(
                 "Missing value",
                 "Please enter an integer."
             )
+
             self.value_entry.focus()
             return None
 
@@ -610,7 +689,7 @@ class MainWindow:
 
             messagebox.showerror(
                 "Invalid input",
-                "Please enter a valid integer."
+                "Please enter a valid integer. Only integers are allowed."
             )
 
             self.value_entry.delete(0, tk.END)
@@ -618,9 +697,9 @@ class MainWindow:
 
             return None
 
-    # --------------------------------------------------
+    # ------------------------------------------------------
     # ADD NODE
-    # --------------------------------------------------
+    # ------------------------------------------------------
 
     def add_node(self):
 
@@ -644,7 +723,7 @@ class MainWindow:
                 self.value_entry.focus()
                 return
 
-            self.highlighted_value = None
+            self.highlighted_path = set()
 
             self.update_interface()
 
@@ -658,16 +737,16 @@ class MainWindow:
         except ValueError as error:
 
             messagebox.showerror(
-                "Level limit reached",
+                "Maximum levels reached",
                 str(error)
             )
 
             self.value_entry.delete(0, tk.END)
             self.value_entry.focus()
 
-    # --------------------------------------------------
+    # ------------------------------------------------------
     # SEARCH NODE
-    # --------------------------------------------------
+    # ------------------------------------------------------
 
     def search_node(self):
 
@@ -676,9 +755,11 @@ class MainWindow:
         if value is None:
             return
 
-        if self.tree.search(value):
+        path = self.tree.search_path(value)
 
-            self.highlighted_value = value
+        if path:
+
+            self.highlighted_path = set(path)
 
             self.update_interface()
 
@@ -688,12 +769,15 @@ class MainWindow:
             )
 
             self.status_label.config(
-                text=f"Node {value} found successfully."
+                text=(
+                    f"Node {value} found. "
+                    f"Search path: {' -> '.join(map(str, path))}"
+                )
             )
 
         else:
 
-            self.highlighted_value = None
+            self.highlighted_path = set()
 
             self.update_interface()
 
@@ -709,9 +793,9 @@ class MainWindow:
         self.value_entry.delete(0, tk.END)
         self.value_entry.focus()
 
-    # --------------------------------------------------
-    # DRAW MAIN TREE
-    # --------------------------------------------------
+    # ------------------------------------------------------
+    # DRAW BINARY SEARCH TREE
+    # ------------------------------------------------------
 
     def draw_tree(self):
 
@@ -733,6 +817,7 @@ class MainWindow:
                 font=("Arial", 14, "bold"),
                 fill="#667788"
             )
+
             return
 
         radius = 19
@@ -741,6 +826,8 @@ class MainWindow:
         vertical_gap = max(45, vertical_gap)
 
         positions = {}
+
+        # Calculate node positions.
 
         def calculate_positions(node, depth, path):
 
@@ -764,9 +851,13 @@ class MainWindow:
                 path * 2 + 1
             )
 
-        calculate_positions(self.tree.root, 0, 0)
+        calculate_positions(
+            self.tree.root,
+            0,
+            0
+        )
 
-        # Draw connections first.
+        # Draw connections before nodes.
 
         def draw_connections(node):
 
@@ -794,11 +885,11 @@ class MainWindow:
 
         draw_connections(self.tree.root)
 
-        # Draw nodes over the connections.
+        # Draw nodes.
 
         for value, (x, y) in positions.items():
 
-            if value == self.highlighted_value:
+            if value in self.highlighted_path:
                 color = "#E5A32B"
             else:
                 color = "#16A6BD"
@@ -821,9 +912,9 @@ class MainWindow:
                 font=("Arial", 10, "bold")
             )
 
-    # --------------------------------------------------
-    # DRAW BOTTOM TRAVERSAL PANELS
-    # --------------------------------------------------
+    # ------------------------------------------------------
+    # DRAW TRAVERSAL PANELS
+    # ------------------------------------------------------
 
     def draw_traversal_panel(self, canvas, values):
 
@@ -836,6 +927,7 @@ class MainWindow:
             return
 
         if not values:
+
             canvas.create_text(
                 width / 2,
                 height / 2,
@@ -843,14 +935,21 @@ class MainWindow:
                 font=("Arial", 10, "bold"),
                 fill="#142536"
             )
+
             return
 
-        # Each traversal is displayed as a connected visual sequence.
         count = len(values)
+
         margin = 14
         usable_width = max(1, width - 2 * margin)
         step = usable_width / count
-        radius = min(14, step * 0.38, max(7, height * 0.20))
+
+        radius = min(
+            14,
+            step * 0.38,
+            max(7, height * 0.20)
+        )
+
         center_y = height / 2
 
         centers = [
@@ -858,9 +957,10 @@ class MainWindow:
             for index in range(count)
         ]
 
-        # Draw arrows before drawing the nodes.
+        # Draw arrows.
 
         for index in range(count - 1):
+
             canvas.create_line(
                 centers[index] + radius,
                 center_y,
@@ -872,9 +972,10 @@ class MainWindow:
                 arrowshape=(7, 8, 3)
             )
 
-        # Draw the nodes in traversal order.
+        # Draw traversal nodes.
 
         for index, value in enumerate(values):
+
             x = centers[index]
 
             canvas.create_oval(
@@ -897,9 +998,9 @@ class MainWindow:
                 font=("Arial", font_size, "bold")
             )
 
-    # --------------------------------------------------
-    # UPDATE TRAVERSAL PANELS
-    # --------------------------------------------------
+    # ------------------------------------------------------
+    # UPDATE ALL TRAVERSALS
+    # ------------------------------------------------------
 
     def update_traversals(self):
 
@@ -918,18 +1019,18 @@ class MainWindow:
             self.tree.postorder()
         )
 
-    # --------------------------------------------------
-    # UPDATE INTERFACE
-    # --------------------------------------------------
+    # ------------------------------------------------------
+    # UPDATE MAIN INTERFACE
+    # ------------------------------------------------------
 
     def update_interface(self):
 
         self.draw_tree()
         self.update_traversals()
 
-    # --------------------------------------------------
+    # ------------------------------------------------------
     # CLEAR TREE
-    # --------------------------------------------------
+    # ------------------------------------------------------
 
     def clear_tree(self):
 
@@ -939,6 +1040,7 @@ class MainWindow:
                 "Clear tree",
                 "The tree is already empty."
             )
+
             return
 
         confirmation = messagebox.askyesno(
@@ -949,7 +1051,7 @@ class MainWindow:
         if confirmation:
 
             self.tree.clear()
-            self.highlighted_value = None
+            self.highlighted_path = set()
 
             self.update_interface()
 
@@ -960,9 +1062,9 @@ class MainWindow:
             self.value_entry.delete(0, tk.END)
             self.value_entry.focus()
 
-    # --------------------------------------------------
+    # ------------------------------------------------------
     # EXIT APPLICATION
-    # --------------------------------------------------
+    # ------------------------------------------------------
 
     def exit_application(self):
 
@@ -975,9 +1077,9 @@ class MainWindow:
             self.root.destroy()
 
 
-# ==================================================
+# ==========================================================
 # MAIN PROGRAM
-# ==================================================
+# ==========================================================
 
 if __name__ == "__main__":
 
